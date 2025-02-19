@@ -33,6 +33,9 @@ public class PersonagemAula1 : MonoBehaviour {
 
 		// Cria um vetor de velocidade inicial para o personagem
 		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
+		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 	}
 
 	// Método chamado uma vez por frame (quadro)

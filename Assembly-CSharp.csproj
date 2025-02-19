@@ -52,7 +52,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Bimestre1\Aula01\PersonagemAula1.cs" />
-     <Compile Include="Assets\Bimestre1\Aula02\PersonagemAula2.cs" />
+     <Compile Include="Assets\Bimestre1\Aula02\PersonagemAula02.cs" />
+     <Compile Include="Assets\Bimestre1\temp\Temp.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>
