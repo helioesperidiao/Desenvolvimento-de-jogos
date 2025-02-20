@@ -159,4 +159,37 @@ public class Temp : MonoBehaviour {
 		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 	}
+
+	void OnCollisionEnter2D(Collision2D objetoTocado){
+		//é executado sempre que um colisor toca em outro colisor
+		//a variável objetoTocado possui dados do objeto tocado.
+
+		string tagObjetoTocado = objetoTocado.gameObject.tag;
+		if (tagObjetoTocado == "Diamante01") {
+
+		}
+			
+	}
+
+	void OnCollisionStay2D(Collision2D objetoTocando){
+		//é executado sempre que um colisor toca em outro colisor
+		//a variável objetoTocado possui dados do objeto tocado.
+
+		string tagObjetoTocado = objetoTocando.gameObject.tag;
+		if (tagObjetoTocado == "Diamante01") {
+
+		}
+
+	}
+
+	void OnCollisionExit2D(Collision2D objetoParouTocar){
+		//é executado sempre que um colisor toca em outro colisor
+		//a variável objetoTocado possui dados do objeto tocado.
+
+		string tagObjetoTocado = objetoParouTocar.gameObject.tag;
+		if (tagObjetoTocado == "Diamante01") {
+
+		}
+
+	}
 }

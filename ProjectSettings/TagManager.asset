@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Diamante01
+  - Chao
+  - Diamante02
+  - Diamante03
+  - tipo1
+  - tipo2
   layers:
   - Default
   - TransparentFX
