@@ -5,8 +5,10 @@ public class PersonagemAula03 : MonoBehaviour {
 
 	bool ApertouBotaoPular; // para saber se o botão de pular foi apertado
 	float VelocidadePuloSimples; // varivael que guarda a velocidade de pulo do personagem
-	Collider2D Colisor2dPersonagem; 
-	bool EstaTocandoAlgumColisor;
+
+	Collider2D Colisor2dPersonagem;  //variável que armazena o colisor do personagem
+
+	bool EstaTocandoAlgumColisor;	//Variável que verificar se o personagem está tocando um colisor
 
 	// Variáveis para controlar a velocidade do personagem
 	float VelocidadeX; // Velocidade no eixo X (horizontal)
@@ -15,28 +17,28 @@ public class PersonagemAula03 : MonoBehaviour {
 	float VelocidadeHorizontalMaxima; // Velocidade máxima que o personagem pode atingir no eixo X
 	float DirecaoHorizontal; // Direção do movimento horizontal (-1 para esquerda, 1 para direita, 0 para parado)
 
-	float VelocidadeVerticalMaxima;
-	float DirecaoVertical;
+	float VelocidadeVerticalMaxima; //Variável que armazena a velocidade Maxima Vertical do personagem
+
+	float DirecaoVertical; // Variável que armazena a direção vertical do personamagem
 
 	Vector2 VetorVelocidadePersonagem; // Vetor que armazena a velocidade do personagem em X e Y
-	// Referência ao componente Rigidbody2D do personagem
-	Rigidbody2D CorpoRigidoPersonagem;
+
+	Rigidbody2D CorpoRigidoPersonagem; // Referência ao componente Rigidbody2D do personagem
 
 	// Método chamado uma vez no início do jogo
 	void Start () {
 
 		ApertouBotaoPular = false; // inicia a variavel com false;
+
 		EstaTocandoAlgumColisor = false; // inicializa a variavel como falso;
 
 		VelocidadePuloSimples = 10; // determina o valor da velocidade do Pulo;
 
-		// Obtém o componente Rigidbody2D do objeto ao qual este script está anexado
-		CorpoRigidoPersonagem = GetComponent<Rigidbody2D> ();
+		CorpoRigidoPersonagem = GetComponent<Rigidbody2D> (); // Obtém o componente Rigidbody2D do objeto ao qual este script está anexado
 
-		Colisor2dPersonagem = GetComponent<Collider2D> ();
+		Colisor2dPersonagem = GetComponent<Collider2D> (); // Obtpem o componente Collider2D do objeto que possui o script
 
-		// Define a escala da gravidade para o Rigidbody2D (1 é o valor padrão)
-		CorpoRigidoPersonagem.gravityScale = 3.0f;
+		CorpoRigidoPersonagem.gravityScale = 3.0f; // Define a escala da gravidade para o Rigidbody2D 
 
 		// Congela a rotação do Rigidbody2D para evitar que o personagem gire ao colidir com algo
 		CorpoRigidoPersonagem.freezeRotation = true;
@@ -59,8 +61,6 @@ public class PersonagemAula03 : MonoBehaviour {
 
 	// Método chamado uma vez por frame (quadro)
 	void Update () {
-
-
 		MovimentoHorizontal (); // Chama o método para controlar o movimento horizontal do personagem
 		MovimentoPuloUnico();
 		//MovimentoVertical (); 
@@ -69,26 +69,56 @@ public class PersonagemAula03 : MonoBehaviour {
 
 	void MovimentoPuloUnico(){
 
+		// Verifica se o botão de pular foi pressionado.
+		// "Jump" é o nome do botão configurado no Input Manager do Unity.
 		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+
+		// Verifica se o personagem está tocando algum colisor.
+		// Colisor2dPersonagem é uma referência ao Collider2D do personagem.
+		// IsTouchingLayers() retorna true se o colisor estiver tocando qualquer camada.
 		EstaTocandoAlgumColisor = Colisor2dPersonagem.IsTouchingLayers ();
 
+		// Verifica se o botão de pular foi pressionado e se o personagem está tocando algum colisor.
 		if (ApertouBotaoPular == true && EstaTocandoAlgumColisor == true) {
+
+			// Armazena a velocidade atual no eixo X do personagem.
 			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
+
+			// Define a velocidade no eixo Y para o valor de VelocidadePuloSimples.
+			// VelocidadePuloSimples é provavelmente uma variável que define a força do pulo.
 			VelocidadeY = VelocidadePuloSimples;
+
+			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
 			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
+			// Isso faz o personagem pular.
 			CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 		}
-	
+
 	}
 
 	void MovimentoPuloSimples(){
-
+		// Verifica se o botão de pular foi pressionado.
+		// "Jump" é o nome do botão configurado no Input Manager do Unity.
 		ApertouBotaoPular = Input.GetButtonDown ("Jump");
 
+		// Verifica se o botão de pular foi pressionado.
 		if (ApertouBotaoPular == true) {
+			// Armazena a velocidade atual no eixo X do personagem.
+			// CorpoRigidoPersonagem.velocity.x retorna a velocidade horizontal do Rigidbody2D.
 			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
+
+			// Define a velocidade no eixo Y para o valor de VelocidadePuloSimples.
+			// VelocidadePuloSimples é uma variável que define a força do pulo.
 			VelocidadeY = VelocidadePuloSimples;
+
+			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
+			// Isso mantém a velocidade horizontal e aplica a força do pulo no eixo Y.
 			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
+			// Isso faz o personagem pular, mantendo sua velocidade horizontal.
 			CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 		}
 	}
