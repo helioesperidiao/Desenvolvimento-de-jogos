@@ -1,13 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Bimestre1\temp\Temp.cs">
-    <FloatingWindows>
-      <FloatingWindow WindowId="1" X="2551" Y="-9" Width="2560" Height="1411">
-        <Files>
-          <File FileName="Assets\Bimestre1\temp\Temp.cs" Line="41" Column="3" />
-        </Files>
-      </FloatingWindow>
-    </FloatingWindows>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Bimestre2\Aula02\Personagem02x02.cs">
+    <Files>
+      <File FileName="Assets\Bimestre2\Aula02\Personagem02x02.cs" Line="106" Column="27" />
+    </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
