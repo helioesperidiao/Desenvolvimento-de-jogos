@@ -32,7 +32,7 @@ public class PersonagemAula03 : MonoBehaviour {
 
 		EstaTocandoAlgumColisor = false; // inicializa a variavel como falso;
 
-		VelocidadePuloSimples = 10; // determina o valor da velocidade do Pulo;
+		VelocidadePuloSimples = 10.0f; // determina o valor da velocidade do Pulo;
 
 		CorpoRigidoPersonagem = GetComponent<Rigidbody2D> (); // Obtém o componente Rigidbody2D do objeto ao qual este script está anexado
 

@@ -10,6 +10,8 @@ TagManager:
   - Diamante03
   - tipo1
   - tipo2
+  - Fim
+  - chave01
   layers:
   - Default
   - TransparentFX

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Bimestre1/Aula03/cena03.unity
+- path: Assets/Bimestre2/Aula01/fase01.unity
   isLoaded: 1
   isActive: 1

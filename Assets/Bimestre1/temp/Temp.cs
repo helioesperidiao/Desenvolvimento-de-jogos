@@ -1,142 +1,198 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Classe que controla o movimento do personagem
 public class Temp : MonoBehaviour {
 
-	bool ApertouBotaoPular; //variavel para saber se foi pressionado ou não o botão
-	float VelocidadePulo; // armazena a velocidade do pulo
-	Collider2D Colisor2dPersonagem; // referencia para o colisor do personagem
-	bool EstaTocandoColisor; // verificar se esta tocando um colisor
+	string NomeCena;
+	int QtdPontos;
 
+	int ContadorPulos;
+
+	SpriteRenderer Renderer;
+
+	string TagObjetoTocado;
+
+	bool ApertouBotaoPular; // para saber se o botão de pular foi apertado
+	float VelocidadePuloSimples; // varivael que guarda a velocidade de pulo do personagem
+	Collider2D Colisor2dPersonagem;  //variável que armazena o colisor do personagem
+	bool EstaTocandoAlgumColisor; //Variável que verificar se o personagem está tocando um colisor
 	// Variáveis para controlar a velocidade do personagem
 	float VelocidadeX; // Velocidade no eixo X (horizontal)
 	float VelocidadeY; // Velocidade no eixo Y (vertical)
 	float VelocidadeHorizontalMaxima; // Velocidade máxima que o personagem pode atingir no eixo X
 	float DirecaoHorizontal; // Direção do movimento horizontal (-1 para esquerda, 1 para direita, 0 para parado)
-
-	float VelocidadeVerticalMaxima; // Velocidade máxima que o personagem pode atingir no eixo Y
-	float DirecaoVertical; // Direção do movimento vertical (-1 para baixo, 1 para cima, 0 para parado)
-
+	float VelocidadeVerticalMaxima; //Variável que armazena a velocidade Maxima Vertical do personagem
+	float DirecaoVertical; // Variável que armazena a direção vertical do personamagem
 	Vector2 VetorVelocidadePersonagem; // Vetor que armazena a velocidade do personagem em X e Y
-
-	Rigidbody2D CorpoRigidoPersonagem; 	// Referência ao componente Rigidbody2D do personagem
-	 
+	// Referência ao componente Rigidbody2D do personagem
+	Rigidbody2D CorpoRigidoPersonagem;
 	// Método chamado uma vez no início do jogo
 	void Start () {
+		
 
-		ApertouBotaoPular = false;
-		VelocidadePulo = 5f;
+		NomeCena = SceneManager.GetActiveScene().name;
+		Debug.Log("Cena atual: " + NomeCena);
+		if (NomeCena != "fase01") {
+			int pontuacao = PlayerPrefs.GetInt("QtdPontos", 0);
+			print (pontuacao);
+
+		}
+
+		PlayerPrefs.SetInt("QtdPontos", 100);
+		ContadorPulos = 0; 
+
+		Renderer = GetComponent<SpriteRenderer> ();
+
+		TagObjetoTocado = "";
+
+		ApertouBotaoPular = false; // inicia a variavel com false;
+		EstaTocandoAlgumColisor = false; // inicializa a variavel como falso;
+
+		VelocidadePuloSimples = 10.0f; // determina o valor da velocidade do Pulo;
+
+		// Obtém o componente Rigidbody2D do objeto ao qual este script está anexado
+		CorpoRigidoPersonagem = GetComponent<Rigidbody2D> ();
 
 		Colisor2dPersonagem = GetComponent<Collider2D> ();
 
-		EstaTocandoColisor = false;
+		// Define a escala da gravidade para o Rigidbody2D (1 é o valor padrão)
+		//CorpoRigidoPersonagem.gravityScale = 3.0f;
 
-		CorpoRigidoPersonagem = GetComponent<Rigidbody2D> (); // Obtém o componente Rigidbody2D do objeto ao qual este script está anexado
-
-		CorpoRigidoPersonagem.gravityScale = 1f; // Define a escala da gravidade para o Rigidbody2D (0 significa que não há gravidade)
-
-		CorpoRigidoPersonagem.freezeRotation = true; // Congela a rotação do Rigidbody2D para evitar que o personagem gire ao colidir com algo
+		// Congela a rotação do Rigidbody2D para evitar que o personagem gire ao colidir com algo
+		CorpoRigidoPersonagem.freezeRotation = true;
 
 		// Inicializa as variáveis de velocidade
 		VelocidadeX = 0f; // Começa parado no eixo X
 		VelocidadeY = 0f; // Começa parado no eixo Y
-
-		VelocidadeHorizontalMaxima = 5f; // Define a velocidade máxima no eixo X
+		VelocidadeHorizontalMaxima = 5.0f; // Define a velocidade máxima no eixo X
 		DirecaoHorizontal = 0f; // Começa sem direção definida
 
-		VelocidadeVerticalMaxima = 5f; // Define a velocidade máxima no eixo Y
-		DirecaoVertical = 0f; // Começa sem direção definida
+		VelocidadeVerticalMaxima = 5.0f; // Define a velocidade maxima no eixo y
+		DirecaoVertical = 0f;			 // Define a direção do movimento na vertical
 
 		// Cria um vetor de velocidade inicial para o personagem
 		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
+		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 	}
 
 	// Método chamado uma vez por frame (quadro)
 	void Update () {
 
-		// Chama o método para controlar o movimento horizontal do personagem
-		MovimentoHorizontal ();
-
-		MovimentoPuloUnico ();
-		//MovimentoPulo ();
-
-
-		// Chama o método para controlar o movimento vertical do personagem
-		//MovimentoVertical ();
+		MovimentoHorizontalFlip ();
+		MovimentoPuloDuplo ();
+		//MovimentoPuloUnico();
+		//MovimentoHorizontal (); 
+		//MovimentoVertical (); 
+		//MovimentoPuloSimples();
 	}
 
 
-	void MovimentoPulo()
-	{
-		// Verifica se o botão de pular (Jump) foi pressionado
-		ApertouBotaoPular = Input.GetButtonDown("Jump");
+	void MovimentoPuloUnico(){
 
-		// Se o botão de pular foi pressionado
-		if (ApertouBotaoPular == true)
-		{
-			// Mantém a velocidade atual no eixo X
+		// Verifica se o botão de pular foi pressionado.
+		// "Jump" é o nome do botão configurado no Input Manager do Unity.
+		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+
+		// Verifica se o personagem está tocando algum colisor.
+		// Colisor2dPersonagem é uma referência ao Collider2D do personagem.
+		// IsTouchingLayers() retorna true se o colisor estiver tocando qualquer camada.
+		EstaTocandoAlgumColisor = Colisor2dPersonagem.IsTouchingLayers ();
+
+		// Verifica se o botão de pular foi pressionado e se o personagem está tocando algum colisor.
+		if (ApertouBotaoPular == true && EstaTocandoAlgumColisor == true) {
+
+			// Armazena a velocidade atual no eixo X do personagem.
 			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
-			// Define a velocidade no eixo Y para o valor do pulo
-			VelocidadeY = VelocidadePulo;
-			// Cria um novo vetor de velocidade com os valores de X e Y
-			VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
-			// Aplica o vetor de velocidade ao Rigidbody2D do personagem
+
+			// Define a velocidade no eixo Y para o valor de VelocidadePuloSimples.
+			// VelocidadePuloSimples é provavelmente uma variável que define a força do pulo.
+			VelocidadeY = VelocidadePuloSimples;
+
+			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
+			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
+			// Isso faz o personagem pular.
+			CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
+		}
+
+	}
+
+	void MovimentoPuloDuplo(){
+
+		// Verifica se o botão de pular foi pressionado.
+		// "Jump" é o nome do botão configurado no Input Manager do Unity.
+		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+
+		// Verifica se o botão de pular foi pressionado.
+		if (ApertouBotaoPular == true && ContadorPulos < 2 ) {
+
+			ContadorPulos = ContadorPulos+1;
+			// Armazena a velocidade atual no eixo X do personagem.
+			// CorpoRigidoPersonagem.velocity.x retorna a velocidade horizontal do Rigidbody2D.
+			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
+
+			// Define a velocidade no eixo Y para o valor de VelocidadePuloSimples.
+			// VelocidadePuloSimples é uma variável que define a força do pulo.
+			VelocidadeY = VelocidadePuloSimples;
+
+			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
+			// Isso mantém a velocidade horizontal e aplica a força do pulo no eixo Y.
+			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
+			// Isso faz o personagem pular, mantendo sua velocidade horizontal.
 			CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 		}
 	}
 
-	void MovimentoPuloUnico()
-	{
-		// Verifica se o botão de pular (Jump) foi pressionado
-		ApertouBotaoPular = Input.GetButtonDown("Jump");
-		// Verifica se o personagem está tocando o chão (ou outra camada configurada)
-		EstaTocandoColisor = Colisor2dPersonagem.IsTouchingLayers();
+	void MovimentoPuloSimples(){
 
-		// Se o botão de pular foi pressionado
-		if (ApertouBotaoPular == true)
-		{
-			// Se o personagem estiver tocando o chão
-			if (EstaTocandoColisor == true)
-			{
-				// Mantém a velocidade atual no eixo X
-				VelocidadeX = CorpoRigidoPersonagem.velocity.x;
-				// Define a velocidade no eixo Y para o valor do pulo
-				VelocidadeY = VelocidadePulo;
-				// Cria um novo vetor de velocidade com os valores de X e Y
-				VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
-				// Aplica o vetor de velocidade ao Rigidbody2D do personagem
-				//CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
+		// Verifica se o botão de pular foi pressionado.
+		// "Jump" é o nome do botão configurado no Input Manager do Unity.
+		ApertouBotaoPular = Input.GetButtonDown ("Jump");
 
-				CorpoRigidoPersonagem.AddForce(new Vector2(VelocidadeX, VelocidadePulo), ForceMode2D.Impulse);
+		// Verifica se o botão de pular foi pressionado.
+		if (ApertouBotaoPular == true) {
 
-			}
+			// Armazena a velocidade atual no eixo X do personagem.
+			// CorpoRigidoPersonagem.velocity.x retorna a velocidade horizontal do Rigidbody2D.
+			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
+
+			// Define a velocidade no eixo Y para o valor de VelocidadePuloSimples.
+			// VelocidadePuloSimples é uma variável que define a força do pulo.
+			VelocidadeY = VelocidadePuloSimples;
+
+			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
+			// Isso mantém a velocidade horizontal e aplica a força do pulo no eixo Y.
+			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
+			// Isso faz o personagem pular, mantendo sua velocidade horizontal.
+			CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 		}
 	}
 
-
-
-
-	// Método para controlar o movimento vertical do personagem
+	//Método para controlar o movimento Vertical do personagem.
 	void MovimentoVertical(){
 
-		// Obtém a direção vertical a partir do input do jogador (teclado ou controle)
-		// Input.GetAxis("Vertical") retorna um valor entre -1 e 1:
-		// -1 para baixo, 1 para cima, 0 se nenhuma tecla estiver sendo pressionada
+		// Obtém a direção Vertical a partir do input do jogador (teclado ou controle)
+		// Input.GetAxis("Vertical") retorna um valor entre (-1 e 1):
+		// -1 para baixo, 1 para cima, 0 se nenhuma tecla do eixo vertical estiver sendo pressionada
 		DirecaoVertical = Input.GetAxis ("Vertical");
 
-		// Mantém a velocidade atual no eixo X (para não interferir no movimento horizontal)
-		VelocidadeX = CorpoRigidoPersonagem.velocity.x;
+		VelocidadeX = CorpoRigidoPersonagem.velocity.x; // recupera a velocidade em x do corpo ridido do personagem.
+		VelocidadeY = DirecaoVertical * VelocidadeVerticalMaxima; // calculo a velocidade em y do personagem.
 
-		// Calcula a velocidade no eixo Y multiplicando a direção pela velocidade máxima
-		VelocidadeY = VelocidadeVerticalMaxima * DirecaoVertical;
+		// cria um novo vetor de velocidade com VelocidadeX e VelocidadeY
+		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY); 
 
-		// Cria um novo vetor de velocidade com os valores calculados
-		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
-
-		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
+		//adiciona o novo vetor de velocidade a velocidade(velocity) do corpo rididp do personagem.
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
+
 	}
 
 	// Método para controlar o movimento horizontal do personagem
@@ -144,13 +200,13 @@ public class Temp : MonoBehaviour {
 
 		// Obtém a direção horizontal a partir do input do jogador (teclado ou controle)
 		// Input.GetAxis("Horizontal") retorna um valor entre -1 e 1:
-		// -1 para esquerda, 1 para direita, 0 se nenhuma tecla estiver sendo pressionada
+		// -1 para esquerda, 1 para direita, 0 se nenhuma tecla do eixo horizontal estiver sendo pressionada
 		DirecaoHorizontal = Input.GetAxis ("Horizontal");
 
 		// Calcula a velocidade no eixo X multiplicando a direção pela velocidade máxima
 		VelocidadeX = VelocidadeHorizontalMaxima * DirecaoHorizontal;
 
-		// Mantém a velocidade atual no eixo Y (para não interferir no movimento vertical)
+		// Mantém a velocidade atual no eixo Y (para não interferir na gravidade ou pulo)
 		VelocidadeY = CorpoRigidoPersonagem.velocity.y;
 
 		// Cria um novo vetor de velocidade com os valores calculados
@@ -160,36 +216,61 @@ public class Temp : MonoBehaviour {
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 	}
 
-	void OnCollisionEnter2D(Collision2D objetoTocado){
-		//é executado sempre que um colisor toca em outro colisor
-		//a variável objetoTocado possui dados do objeto tocado.
+	void MovimentoHorizontalFlip(){
 
-		string tagObjetoTocado = objetoTocado.gameObject.tag;
-		if (tagObjetoTocado == "Diamante01") {
+		// Obtém a direção horizontal a partir do input do jogador (teclado ou controle)
+		// Input.GetAxis("Horizontal") retorna um valor entre -1 e 1:
+		// -1 para esquerda, 1 para direita, 0 se nenhuma tecla do eixo horizontal estiver sendo pressionada
+		DirecaoHorizontal = Input.GetAxis ("Horizontal");
 
+		// Calcula a velocidade no eixo X multiplicando a direção pela velocidade máxima
+		VelocidadeX = VelocidadeHorizontalMaxima * DirecaoHorizontal;
+
+		// Mantém a velocidade atual no eixo Y (para não interferir na gravidade ou pulo)
+		VelocidadeY = CorpoRigidoPersonagem.velocity.y;
+
+		// Cria um novo vetor de velocidade com os valores calculados
+		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+
+		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
+		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
+		if (DirecaoHorizontal < 0) {
+			Renderer.flipX = true;
+		} else if (DirecaoHorizontal > 0) {
+			Renderer.flipX = false;
 		}
-			
 	}
 
-	void OnCollisionStay2D(Collision2D objetoTocando){
-		//é executado sempre que um colisor toca em outro colisor
-		//a variável objetoTocado possui dados do objeto tocado.
+	void OnCollisionEnter2D(Collision2D objetoTocado ){
 
-		string tagObjetoTocado = objetoTocando.gameObject.tag;
-		if (tagObjetoTocado == "Diamante01") {
+		TagObjetoTocado = objetoTocado.gameObject.tag;
 
+		if (TagObjetoTocado.Contains ("chao")) {
+			ContadorPulos = 0;
 		}
+			if (TagObjetoTocado == "Diamante01") {
+			print (TagObjetoTocado); 
+			Destroy (objetoTocado.gameObject);
+		}
+		if (TagObjetoTocado == "Diamante02") {
+			print (TagObjetoTocado);
+			Destroy (objetoTocado.gameObject,1.5f);
+		}
+		if (TagObjetoTocado == "Diamante03") {
+			print (TagObjetoTocado);
+			objetoTocado.rigidbody.velocity = new Vector2 (10f * DirecaoHorizontal, 10f);
+			Destroy (objetoTocado.gameObject, 0.6f);
+		}
+		if (TagObjetoTocado == "tipo1") {
+			if (VelocidadeHorizontalMaxima < 10) {
+				VelocidadeHorizontalMaxima = VelocidadeHorizontalMaxima + 1f;
+				print ("VelocidadeHorizontalMaxima: " + VelocidadeHorizontalMaxima);
+				Destroy (objetoTocado.gameObject, 0.05f);
+			}
+		}
+	if (TagObjetoTocado == "tipo2") {
+			SceneManager.LoadScene ("fase02");
 
 	}
-
-	void OnCollisionExit2D(Collision2D objetoParouTocar){
-		//é executado sempre que um colisor toca em outro colisor
-		//a variável objetoTocado possui dados do objeto tocado.
-
-		string tagObjetoTocado = objetoParouTocar.gameObject.tag;
-		if (tagObjetoTocado == "Diamante01") {
-
-		}
-
-	}
+}
 }
