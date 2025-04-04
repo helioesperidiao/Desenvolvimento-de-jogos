@@ -51,13 +51,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Bimestre1\Aula01\PersonagemAula1.cs" />
-     <Compile Include="Assets\Bimestre1\Aula02\PersonagemAula02.cs" />
-     <Compile Include="Assets\Bimestre1\Aula03\PersonagemAula03.cs" />
-     <Compile Include="Assets\Bimestre1\Aula04\PersonagemAula04.cs" />
+     <Compile Include="Assets\Bimestre1\Aula01 - Movimento Horizontal\PersonagemAula1.cs" />
+     <Compile Include="Assets\Bimestre1\Aula02 -Movimento Vertical\PersonagemAula02.cs" />
+     <Compile Include="Assets\Bimestre1\Aula03 - Movimento Pulo Unico\PersonagemAula03.cs" />
+     <Compile Include="Assets\Bimestre1\Aula04 - Bonus de Velocidade\PersonagemAula04.cs" />
      <Compile Include="Assets\Bimestre1\temp\Temp.cs" />
-     <Compile Include="Assets\Bimestre2\Aula01\Personagem02x01.cs" />
-     <Compile Include="Assets\Bimestre2\Aula02\Personagem02x02.cs" />
+     <Compile Include="Assets\Bimestre2\Aula01 - Carregar nova cena\Personagem02x01.cs" />
+     <Compile Include="Assets\Bimestre2\Aula02 - Flip\Personagem02x02.cs" />
+     <Compile Include="Assets\Bimestre2\Aula03 - Pulo Duplo - Multiplos Pulos - Parede sem Atrito\Personagem02x03.cs" />
+     <Compile Include="Assets\Bimestre2\Aula03 - Pulo Duplo - Multiplos Pulos - Parede sem Atrito\Personagem02x03PuloMultiplo.cs" />
+     <Compile Include="Assets\Bimestre2\Aula03 - Pulo Duplo - Multiplos Pulos - Parede sem Atrito\Personagem02x03SemAtrito.cs" />
+     <Compile Include="Assets\Bimestre2\Temp\tempBimestre2.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>

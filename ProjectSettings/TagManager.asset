@@ -5,13 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Diamante01
-  - Chao
   - Diamante02
   - Diamante03
   - tipo1
   - tipo2
   - Fim
   - chave01
+  - parede
+  - chao
+  - parede chao
+  - bonusPuloUnico
+  - bonusPuloDuplo
+  - semAtrito
   layers:
   - Default
   - TransparentFX
