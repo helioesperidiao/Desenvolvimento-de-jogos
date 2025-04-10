@@ -22,6 +22,8 @@ TagManager:
   - pontos2
   - lama chao
   - trampolim
+  - perder1Vida
+  - ganhar1Vida
   layers:
   - Default
   - TransparentFX

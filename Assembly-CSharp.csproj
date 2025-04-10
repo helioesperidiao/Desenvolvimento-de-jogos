@@ -63,6 +63,7 @@
      <Compile Include="Assets\Bimestre2\Aula03 - Pulo Duplo - Multiplos Pulos - Parede sem Atrito\Personagem02x03SemAtrito.cs" />
      <Compile Include="Assets\Bimestre2\Aula04 - Tipos de Colisao\Personagem02x04.cs" />
      <Compile Include="Assets\Bimestre2\Aula05 - Mecanicas Elaboradas de Movimentacao\Personagem02x05.cs" />
+     <Compile Include="Assets\Bimestre2\Aula06 - Apresentacao de Texto\Personagem02x06.cs" />
      <Compile Include="Assets\Bimestre2\Temp\tempBimestre2.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Bimestre2/Aula05 - Mecanicas Elaboradas de Movimentacao/02x05.unity
+- path: Assets/Bimestre2/Aula06 - Apresentacao de Texto/02x06.unity
   isLoaded: 1
   isActive: 1

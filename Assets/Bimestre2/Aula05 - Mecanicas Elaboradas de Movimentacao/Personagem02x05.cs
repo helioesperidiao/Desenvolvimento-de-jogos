@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 // Classe que controla o movimento do personagem 
-public class Personagem02x05 : MonoBehaviour {
+public class Personagem02x05 : MonoBehaviour
+{
+	
+
 	string TagTriggerEnter;
 	string TagTriggerStay;
 	string TagTriggerExit;
@@ -37,28 +40,29 @@ public class Personagem02x05 : MonoBehaviour {
 	float DirecaoVertical; // Variável que armazena a direção vertical do personamagem
 
 	Vector2 VetorVelocidadePersonagem; // Vetor que armazena a velocidade do personagem em X e Y
-	// Referência ao componente Rigidbody2D do personagem
+									   // Referência ao componente Rigidbody2D do personagem
 	Rigidbody2D CorpoRigidoPersonagem;
 
 	// Método chamado uma vez no início do jogo
-	void Start () {
+	void Start()
+	{
 
 		TagTriggerEnter = "";
-		TagTriggerStay 	= "";
-		TagTriggerExit	= "";
+		TagTriggerStay = "";
+		TagTriggerExit = "";
 
 		TagObjetoStay = "";
 		TagObjetoExit = "";
 
 		// Cria um novo material e armazena na váriavel  MaterialSemAtrito
-		MaterialSemAtrito = new PhysicsMaterial2D(); 
+		MaterialSemAtrito = new PhysicsMaterial2D();
 		MaterialSemAtrito.friction = 0f; // esse material possui atrito zero;
 
 		//Inicalmente o personagme não pode pular pq o total de pulos é igual a zero.
 		TotalPulos = 2; //determina o limite de pulos do personagem
 		ContadorPulos = 0; // Conta quantos pulos o personagem pode efetuar
 
-		Rerender = GetComponent<SpriteRenderer> (); // incializa a variável
+		Rerender = GetComponent<SpriteRenderer>(); // incializa a variável
 
 		PegouChave01 = false;
 		TagObjetoTocado = "";
@@ -69,9 +73,9 @@ public class Personagem02x05 : MonoBehaviour {
 		VelocidadePuloSimples = 10.0f; // determina o valor da velocidade do Pulo;
 
 		// Obtém o componente Rigidbody2D do objeto ao qual este script está anexado
-		CorpoRigidoPersonagem = GetComponent<Rigidbody2D> ();
+		CorpoRigidoPersonagem = GetComponent<Rigidbody2D>();
 
-		Colisor2dPersonagem = GetComponent<Collider2D> ();
+		Colisor2dPersonagem = GetComponent<Collider2D>();
 
 		// Define a escala da gravidade para o Rigidbody2D (1 é o valor padrão)
 		CorpoRigidoPersonagem.gravityScale = 3.0f;
@@ -86,20 +90,21 @@ public class Personagem02x05 : MonoBehaviour {
 		DirecaoHorizontal = 0f; // Começa sem direção definida
 
 		VelocidadeVerticalMaxima = 5.0f; // Define a velocidade maxima no eixo y
-		DirecaoVertical = 0f;			 // Define a direção do movimento na vertical
+		DirecaoVertical = 0f;            // Define a direção do movimento na vertical
 
 		// Cria um vetor de velocidade inicial para o personagem
-		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+		VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 	}
 
 	// Método chamado uma vez por frame (quadro)
-	void Update () {
-		
+	void Update()
+	{
+
 		MovimentoHorizontalFlipComReducaoAoPular();
-		MovimentoPuloMultiploComReducaoVelocidade ();
+		MovimentoPuloMultiploComReducaoVelocidade();
 		//MovimentoHorizontalFlip ();
 		//MovimentoPuloDuplo ();
 		//MovimentoHorizontal ();
@@ -108,88 +113,134 @@ public class Personagem02x05 : MonoBehaviour {
 		//MovimentoPuloSimples();
 	}
 
-	void MovimentoHorizontalFlipComReducaoAoPular(){
+	/// <summary>
+	/// Controla o movimento horizontal do personagem com inversão de sprite (flip) e redução progressiva
+	/// da velocidade conforme a quantidade de pulos realizados.
+	/// </summary>
+	/// <remarks>
+	/// Este método realiza as seguintes ações:
+	/// 1. Captura o input horizontal do jogador
+	/// 2. Calcula a velocidade considerando reduções progressivas durante pulos
+	/// 3. Mantém a velocidade vertical existente (para não interferir com física de pulo/gravidade)
+	/// 4. Aplica o movimento ao Rigidbody2D
+	/// 5. Inverte o sprite quando o movimento é para a esquerda
+	/// </remarks>
+	void MovimentoHorizontalFlipComReducaoAoPular()
+	{
+		// Obtém a direção horizontal do input (-1 = esquerda, 1 = direta, 0 = neutro)
+		DirecaoHorizontal = Input.GetAxis("Horizontal");
 
-		// Obtém a direção horizontal a partir do input do jogador (teclado ou controle)
-		// Input.GetAxis("Horizontal") retorna um valor entre -1 e 1:
-		// -1 para esquerda, 1 para direita, 0 se nenhuma tecla do eixo horizontal estiver sendo pressionada
-		DirecaoHorizontal = Input.GetAxis ("Horizontal");
-
-		// Calcula a velocidade no eixo X multiplicando a direção pela velocidade máxima
+		// Calcula a velocidade base multiplicando a direção pela velocidade máxima
 		VelocidadeX = VelocidadeHorizontalMaxima * DirecaoHorizontal;
 
-		if (ContadorPulos == 1) {
-			VelocidadeX = (VelocidadeHorizontalMaxima * DirecaoHorizontal)*0.8f;
+		// Aplica redução progressiva da velocidade horizontal conforme quantidade de pulos:
+		// - 1 pulo: 80% da velocidade normal
+		// - 2 pulos: 60% da velocidade normal
+		// - 3 pulos: 40% da velocidade normal
+		if (ContadorPulos == 1)
+		{
+			VelocidadeX = (VelocidadeHorizontalMaxima * DirecaoHorizontal) * 0.8f;
 		}
-		if (ContadorPulos == 2) {
-			VelocidadeX = (VelocidadeHorizontalMaxima * DirecaoHorizontal)*0.6f;
+		if (ContadorPulos == 2)
+		{
+			VelocidadeX = (VelocidadeHorizontalMaxima * DirecaoHorizontal) * 0.6f;
 		}
-		if (ContadorPulos == 3) {
-			VelocidadeX = (VelocidadeHorizontalMaxima * DirecaoHorizontal)*0.4f;
+		if (ContadorPulos == 3)
+		{
+			VelocidadeX = (VelocidadeHorizontalMaxima * DirecaoHorizontal) * 0.4f;
 		}
-		// Mantém a velocidade atual no eixo Y (para não interferir na gravidade ou pulo)
+
+		// Preserva a velocidade atual no eixo Y para manter a física de pulo/queda
 		VelocidadeY = CorpoRigidoPersonagem.velocity.y;
 
-		// Cria um novo vetor de velocidade com os valores calculados
-		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+		// Cria um novo vetor de velocidade combinando os componentes X (calculado) e Y (preservado)
+		VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
-		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
+		// Aplica o vetor de velocidade ao Rigidbody2D para efetivar o movimento
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
-		if (DirecaoHorizontal < 0) {
+
+		// Controla a inversão do sprite (flip) baseado na direção do movimento:
+		// - Para esquerda (valores negativos): ativa flipX
+		// - Para direita (valores positivos): desativa flipX
+		if (DirecaoHorizontal < 0)
+		{
 			Rerender.flipX = true;
-		} else if (DirecaoHorizontal > 0) {
+		}
+		else if (DirecaoHorizontal > 0)
+		{
 			Rerender.flipX = false;
 		}
-
 	}
-	void MovimentoPuloMultiploComReducaoVelocidade(){
 
-		// Verifica se o botão de pular foi pressionado.
-		// "Jump" é o nome do botão configurado no Input Manager do Unity.
-		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+	/// <summary>
+	/// Controla o sistema de pulos múltiplos com redução progressiva da força do pulo
+	/// </summary>
+	/// <remarks>
+	/// Este método implementa um sistema de pulo que permite:
+	/// 1. Múltiplos pulos consecutivos no ar (até o limite definido por TotalPulos)
+	/// 2. Redução progressiva da força vertical em pulos consecutivos
+	/// 3. Manutenção da velocidade horizontal durante os pulos
+	/// 
+	/// Requer configuração prévia:
+	/// - Input "Jump" configurado no Input Manager
+	/// - Variáveis VelocidadePuloSimples e TotalPulos definidas
+	/// - Referência ao Rigidbody2D do personagem
+	/// </remarks>
+	void MovimentoPuloMultiploComReducaoVelocidade()
+	{
+		// Verifica se o botão de pulo (configurado como "Jump") foi pressionado neste frame
+		ApertouBotaoPular = Input.GetButtonDown("Jump");
 
+		// Condições para executar o pulo:
+		// 1. Botão de pulo pressionado
+		// 2. Número de pulos atual menor que o total permitido
+		if (ApertouBotaoPular == true && ContadorPulos < TotalPulos)
+		{
+			// Incrementa o contador de pulos realizados
+			ContadorPulos = ContadorPulos + 1;
 
-		// Verifica se o botão de pular foi pressionado e se o personagem está tocando algum colisor.
-		if (ApertouBotaoPular == true && ContadorPulos < TotalPulos) {
-
-			ContadorPulos = ContadorPulos + 1;  //ContadorPulos++;
-
-			// Armazena a velocidade atual no eixo X do personagem.
+			// Preserva a velocidade horizontal atual do personagem
 			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
 
-			// Define a velocidade no eixo Y para o valor de VelocidadePuloSimples.
-			// VelocidadePuloSimples é provavelmente uma variável que define a força do pulo.
-			if (ContadorPulos == 1) {
+			// Define a força vertical do pulo com redução progressiva:
+			// - 1º pulo: 100% da velocidade normal
+			// - 2º pulo: 80% da velocidade normal
+			// - 3º pulo: 70% da velocidade normal
+			if (ContadorPulos == 1)
+			{
 				VelocidadeY = VelocidadePuloSimples;
 			}
-
-			if (ContadorPulos == 2) {
+			if (ContadorPulos == 2)
+			{
 				VelocidadeY = VelocidadePuloSimples * 0.8f;
 			}
-			if (ContadorPulos == 3) {
+			if (ContadorPulos == 3)
+			{
 				VelocidadeY = VelocidadePuloSimples * 0.7f;
 			}
 
-			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
-			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+			// Cria vetor de velocidade combinando:
+			// - X: velocidade horizontal preservada
+			// - Y: nova velocidade vertical calculada
+			VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
-			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
-			// Isso faz o personagem pular.
+			// Aplica o vetor de velocidade ao Rigidbody2D para executar o movimento
 			CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 		}
-
 	}
 
 
-	void MovimentoPuloDuplo(){
+	void MovimentoPuloDuplo()
+	{
 
 		// Verifica se o botão de pular foi pressionado.
 		// "Jump" é o nome do botão configurado no Input Manager do Unity.
-		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+		ApertouBotaoPular = Input.GetButtonDown("Jump");
 
 
 		// Verifica se o botão de pular foi pressionado e se o personagem está tocando algum colisor.
-		if (ApertouBotaoPular == true && ContadorPulos < 2) {
+		if (ApertouBotaoPular == true && ContadorPulos < 2)
+		{
 
 			ContadorPulos = ContadorPulos + 1;  //ContadorPulos++;
 
@@ -201,7 +252,7 @@ public class Personagem02x05 : MonoBehaviour {
 			VelocidadeY = VelocidadePuloSimples;
 
 			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
-			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+			VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
 			// Isso faz o personagem pular.
@@ -210,12 +261,13 @@ public class Personagem02x05 : MonoBehaviour {
 
 	}
 
-	void MovimentoHorizontalFlip(){
+	void MovimentoHorizontalFlip()
+	{
 
 		// Obtém a direção horizontal a partir do input do jogador (teclado ou controle)
 		// Input.GetAxis("Horizontal") retorna um valor entre -1 e 1:
 		// -1 para esquerda, 1 para direita, 0 se nenhuma tecla do eixo horizontal estiver sendo pressionada
-		DirecaoHorizontal = Input.GetAxis ("Horizontal");
+		DirecaoHorizontal = Input.GetAxis("Horizontal");
 
 		// Calcula a velocidade no eixo X multiplicando a direção pela velocidade máxima
 		VelocidadeX = VelocidadeHorizontalMaxima * DirecaoHorizontal;
@@ -224,31 +276,36 @@ public class Personagem02x05 : MonoBehaviour {
 		VelocidadeY = CorpoRigidoPersonagem.velocity.y;
 
 		// Cria um novo vetor de velocidade com os valores calculados
-		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+		VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
-		if (DirecaoHorizontal < 0) {
+		if (DirecaoHorizontal < 0)
+		{
 			Rerender.flipX = true;
-		} else if (DirecaoHorizontal > 0) {
+		}
+		else if (DirecaoHorizontal > 0)
+		{
 			Rerender.flipX = false;
 		}
 
 	}
 
-	void MovimentoPuloUnico(){
+	void MovimentoPuloUnico()
+	{
 
 		// Verifica se o botão de pular foi pressionado.
 		// "Jump" é o nome do botão configurado no Input Manager do Unity.
-		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+		ApertouBotaoPular = Input.GetButtonDown("Jump");
 
 		// Verifica se o personagem está tocando algum colisor.
 		// Colisor2dPersonagem é uma referência ao Collider2D do personagem.
 		// IsTouchingLayers() retorna true se o colisor estiver tocando qualquer camada.
-		EstaTocandoAlgumColisor = Colisor2dPersonagem.IsTouchingLayers ();
+		EstaTocandoAlgumColisor = Colisor2dPersonagem.IsTouchingLayers();
 
 		// Verifica se o botão de pular foi pressionado e se o personagem está tocando algum colisor.
-		if (ApertouBotaoPular == true && EstaTocandoAlgumColisor == true) {
+		if (ApertouBotaoPular == true && EstaTocandoAlgumColisor == true)
+		{
 
 			// Armazena a velocidade atual no eixo X do personagem.
 			VelocidadeX = CorpoRigidoPersonagem.velocity.x;
@@ -258,7 +315,7 @@ public class Personagem02x05 : MonoBehaviour {
 			VelocidadeY = VelocidadePuloSimples;
 
 			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
-			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+			VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
 			// Isso faz o personagem pular.
@@ -267,14 +324,16 @@ public class Personagem02x05 : MonoBehaviour {
 
 	}
 
-	void MovimentoPuloSimples(){
+	void MovimentoPuloSimples()
+	{
 
 		// Verifica se o botão de pular foi pressionado.
 		// "Jump" é o nome do botão configurado no Input Manager do Unity.
-		ApertouBotaoPular = Input.GetButtonDown ("Jump");
+		ApertouBotaoPular = Input.GetButtonDown("Jump");
 
 		// Verifica se o botão de pular foi pressionado.
-		if (ApertouBotaoPular == true) {
+		if (ApertouBotaoPular == true)
+		{
 
 			// Armazena a velocidade atual no eixo X do personagem.
 			// CorpoRigidoPersonagem.velocity.x retorna a velocidade horizontal do Rigidbody2D.
@@ -286,7 +345,7 @@ public class Personagem02x05 : MonoBehaviour {
 
 			// Cria um novo vetor de velocidade com a velocidade X atual e a nova velocidade Y.
 			// Isso mantém a velocidade horizontal e aplica a força do pulo no eixo Y.
-			VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+			VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 			// Aplica o novo vetor de velocidade ao Rigidbody2D do personagem.
 			// Isso faz o personagem pular, mantendo sua velocidade horizontal.
@@ -295,18 +354,19 @@ public class Personagem02x05 : MonoBehaviour {
 	}
 
 	//Método para controlar o movimento Vertical do personagem.
-	void MovimentoVertical(){
+	void MovimentoVertical()
+	{
 
 		// Obtém a direção Vertical a partir do input do jogador (teclado ou controle)
 		// Input.GetAxis("Vertical") retorna um valor entre (-1 e 1):
 		// -1 para baixo, 1 para cima, 0 se nenhuma tecla do eixo vertical estiver sendo pressionada
-		DirecaoVertical = Input.GetAxis ("Vertical");
+		DirecaoVertical = Input.GetAxis("Vertical");
 
 		VelocidadeX = CorpoRigidoPersonagem.velocity.x; // recupera a velocidade em x do corpo ridido do personagem.
 		VelocidadeY = DirecaoVertical * VelocidadeVerticalMaxima; // calculo a velocidade em y do personagem.
 
 		// cria um novo vetor de velocidade com VelocidadeX e VelocidadeY
-		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY); 
+		VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 		//adiciona o novo vetor de velocidade a velocidade(velocity) do corpo rididp do personagem.
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
@@ -314,12 +374,13 @@ public class Personagem02x05 : MonoBehaviour {
 	}
 
 	// Método para controlar o movimento horizontal do personagem
-	void MovimentoHorizontal(){
+	void MovimentoHorizontal()
+	{
 
 		// Obtém a direção horizontal a partir do input do jogador (teclado ou controle)
 		// Input.GetAxis("Horizontal") retorna um valor entre -1 e 1:
 		// -1 para esquerda, 1 para direita, 0 se nenhuma tecla do eixo horizontal estiver sendo pressionada
-		DirecaoHorizontal = Input.GetAxis ("Horizontal");
+		DirecaoHorizontal = Input.GetAxis("Horizontal");
 
 		// Calcula a velocidade no eixo X multiplicando a direção pela velocidade máxima
 		VelocidadeX = VelocidadeHorizontalMaxima * DirecaoHorizontal;
@@ -328,54 +389,64 @@ public class Personagem02x05 : MonoBehaviour {
 		VelocidadeY = CorpoRigidoPersonagem.velocity.y;
 
 		// Cria um novo vetor de velocidade com os valores calculados
-		VetorVelocidadePersonagem = new Vector2 (VelocidadeX, VelocidadeY);
+		VetorVelocidadePersonagem = new Vector2(VelocidadeX, VelocidadeY);
 
 		// Aplica o vetor de velocidade ao Rigidbody2D para mover o personagem
 		CorpoRigidoPersonagem.velocity = VetorVelocidadePersonagem;
 	}
 
-	void OnTriggerEnter2D(Collider2D objetoTriggerEnter){
+	void OnTriggerEnter2D(Collider2D objetoTriggerEnter)
+	{
 		TagTriggerEnter = objetoTriggerEnter.gameObject.tag;
-		print ("OnTriggerEnter2D():" + TagTriggerEnter);
-		if (TagTriggerEnter.Contains ("tipo1")) {
-			Destroy (objetoTriggerEnter.gameObject);
+		print("OnTriggerEnter2D():" + TagTriggerEnter);
+		if (TagTriggerEnter.Contains("tipo1"))
+		{
+			Destroy(objetoTriggerEnter.gameObject);
 		}
 	}
 
-	void OnTriggerStay2D(Collider2D objetoTriggerStay){
+	void OnTriggerStay2D(Collider2D objetoTriggerStay)
+	{
 		TagTriggerStay = objetoTriggerStay.gameObject.tag;
 		//print ("OnTriggerStay2D():" + TagTriggerStay);
 	}
 
 
-	void OnTriggerExit2D(Collider2D objetoTriggerExit){
+	void OnTriggerExit2D(Collider2D objetoTriggerExit)
+	{
 		TagTriggerExit = objetoTriggerExit.gameObject.tag;
 		//print ("OnTriggerExit2D():" + TagTriggerExit);
 	}
 
-	void OnCollisionExit2D(Collision2D objetoExit){
+	void OnCollisionExit2D(Collision2D objetoExit)
+	{
 		TagObjetoExit = objetoExit.gameObject.tag;
 
-		if (TagObjetoExit.Contains("lama")) {
-			print ("onCollisionExit():"+TagObjetoExit);
+		if (TagObjetoExit.Contains("lama"))
+		{
+			print("onCollisionExit():" + TagObjetoExit);
 			VelocidadeHorizontalMaxima = 5.0f;
 		}
 	}
 
-	void OnCollisionStay2D(Collision2D objetoStay){
+	void OnCollisionStay2D(Collision2D objetoStay)
+	{
 		TagObjetoStay = objetoStay.gameObject.tag;
-		if (TagObjetoStay.Contains("lama")) {
-			print ("OnCollisionStay():"+TagObjetoExit);
+		if (TagObjetoStay.Contains("lama"))
+		{
+			print("OnCollisionStay():" + TagObjetoExit);
 			VelocidadeHorizontalMaxima = 1.0f;
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D objetoTocado ){
+	void OnCollisionEnter2D(Collision2D objetoTocado)
+	{
 
 		TagObjetoTocado = objetoTocado.gameObject.tag;
 
-		if (TagObjetoTocado.Contains ("trampolim")) {
-			CorpoRigidoPersonagem.velocity = new Vector2 (0, 15);
+		if (TagObjetoTocado.Contains("trampolim"))
+		{
+			CorpoRigidoPersonagem.velocity = new Vector2(0, 15);
 		}
 
 		/*
@@ -383,58 +454,71 @@ public class Personagem02x05 : MonoBehaviour {
 			SceneManager.LoadScene ("fase02");
 		}
 		*/
-		if (TagObjetoTocado.Contains("semAtrito")) {
-			print ("Tocou TAG: semAtrito");
+		if (TagObjetoTocado.Contains("semAtrito"))
+		{
+			print("Tocou TAG: semAtrito");
 			objetoTocado.collider.sharedMaterial = MaterialSemAtrito;
 		}
-		if (TagObjetoTocado.Contains("chao")) {
-			print ("OnCollisionEnter2D():"+TagObjetoTocado);
+		if (TagObjetoTocado.Contains("chao"))
+		{
+			print("OnCollisionEnter2D():" + TagObjetoTocado);
 			ContadorPulos = 0;
 		}
 
-		if (TagObjetoTocado == "bonusPuloUnico") {
+		if (TagObjetoTocado == "bonusPuloUnico")
+		{
 			TotalPulos = 1;
-			Destroy (objetoTocado.gameObject);
+			Destroy(objetoTocado.gameObject);
 		}
-		if (TagObjetoTocado == "bonusPuloDuplo") {
+		if (TagObjetoTocado == "bonusPuloDuplo")
+		{
 			TotalPulos = 2;
-			Destroy (objetoTocado.gameObject);
+			Destroy(objetoTocado.gameObject);
 		}
 
 
-		if (TagObjetoTocado == "Fim" && PegouChave01==true) {
-			SceneManager.LoadScene ("fase02");
+		if (TagObjetoTocado == "Fim" && PegouChave01 == true)
+		{
+			SceneManager.LoadScene("fase02");
 		}
 
-		if (TagObjetoTocado == "chave01") {
+		if (TagObjetoTocado == "chave01")
+		{
 			PegouChave01 = true;
-			Destroy (objetoTocado.gameObject);
+			Destroy(objetoTocado.gameObject);
 		}
-		if (TagObjetoTocado == "Diamante01") {
-			print (TagObjetoTocado);
-			Destroy (objetoTocado.gameObject);
+		if (TagObjetoTocado == "Diamante01")
+		{
+			print(TagObjetoTocado);
+			Destroy(objetoTocado.gameObject);
 		}
-		if (TagObjetoTocado == "Diamante02") {
-			print (TagObjetoTocado);
-			Destroy (objetoTocado.gameObject,1.5f);
+		if (TagObjetoTocado == "Diamante02")
+		{
+			print(TagObjetoTocado);
+			Destroy(objetoTocado.gameObject, 1.5f);
 		}
-		if (TagObjetoTocado == "Diamante03") {
-			print (TagObjetoTocado);
-			objetoTocado.rigidbody.velocity = new Vector2 (10f * DirecaoHorizontal, 10f);
-			Destroy (objetoTocado.gameObject, 0.6f);
+		if (TagObjetoTocado == "Diamante03")
+		{
+			print(TagObjetoTocado);
+			objetoTocado.rigidbody.velocity = new Vector2(10f * DirecaoHorizontal, 10f);
+			Destroy(objetoTocado.gameObject, 0.6f);
 		}
-		if (TagObjetoTocado == "tipo1") {
-			if (VelocidadeHorizontalMaxima < 10) {
+		if (TagObjetoTocado == "tipo1")
+		{
+			if (VelocidadeHorizontalMaxima < 10)
+			{
 				VelocidadeHorizontalMaxima = VelocidadeHorizontalMaxima + 1f;
-				print ("VelocidadeHorizontalMaxima: " + VelocidadeHorizontalMaxima);
-				Destroy (objetoTocado.gameObject, 0.05f);
+				print("VelocidadeHorizontalMaxima: " + VelocidadeHorizontalMaxima);
+				Destroy(objetoTocado.gameObject, 0.05f);
 			}
 		}
-		if (TagObjetoTocado == "tipo2") {
-			if (VelocidadeHorizontalMaxima >= 2) {
+		if (TagObjetoTocado == "tipo2")
+		{
+			if (VelocidadeHorizontalMaxima >= 2)
+			{
 				VelocidadeHorizontalMaxima = VelocidadeHorizontalMaxima - 1f;
-				print ("VelocidadeHorizontalMaxima: " + VelocidadeHorizontalMaxima);
-				Destroy (objetoTocado.gameObject, 0.05f);
+				print("VelocidadeHorizontalMaxima: " + VelocidadeHorizontalMaxima);
+				Destroy(objetoTocado.gameObject, 0.05f);
 			}
 		}
 
