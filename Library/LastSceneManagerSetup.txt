@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Bimestre2/Aula03 - Pulo Duplo - Multiplos Pulos - Parede sem Atrito/Exemplo03.unity
+- path: Assets/Bimestre2/Aula05 - Mecanicas Elaboradas de Movimentacao/02x05.unity
   isLoaded: 1
   isActive: 1

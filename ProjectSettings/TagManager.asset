@@ -17,6 +17,11 @@ TagManager:
   - bonusPuloUnico
   - bonusPuloDuplo
   - semAtrito
+  - lama
+  - pontos1
+  - pontos2
+  - lama chao
+  - trampolim
   layers:
   - Default
   - TransparentFX
