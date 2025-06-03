@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Bimestre2/Aula01/fase01.unity
-    guid: 17e82eff3775a6a44b9d55e00e554ace
+    path: Assets/Bimestre2/Temp/gameOver.unity
+    guid: 33a30dfcd5160c048ba56f6f1a00fcea
   - enabled: 1
-    path: Assets/Bimestre2/Aula01/fase02.unity
-    guid: c4b2f0fcec9c82f4dbcf8a7bb1618411
+    path: Assets/Bimestre2/Temp/fase01.unity
+    guid: 621de90d9581cc34ca293f4eeef5b84c

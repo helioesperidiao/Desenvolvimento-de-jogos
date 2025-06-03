@@ -54,6 +54,7 @@
      <Compile Include="Assets\Bimestre1\Aula01 - Movimento Horizontal\PersonagemAula1.cs" />
      <Compile Include="Assets\Bimestre1\Aula02 -Movimento Vertical\PersonagemAula02.cs" />
      <Compile Include="Assets\Bimestre1\Aula03 - Movimento Pulo Unico\PersonagemAula03.cs" />
+     <Compile Include="Assets\Bimestre1\Aula03 - Movimento Pulo Unico\ZoomCamera.cs" />
      <Compile Include="Assets\Bimestre1\Aula04 - Bonus de Velocidade\PersonagemAula04.cs" />
      <Compile Include="Assets\Bimestre1\temp\Temp.cs" />
      <Compile Include="Assets\Bimestre2\Aula01 - Carregar nova cena\Personagem02x01.cs" />
@@ -64,7 +65,12 @@
      <Compile Include="Assets\Bimestre2\Aula04 - Tipos de Colisao\Personagem02x04.cs" />
      <Compile Include="Assets\Bimestre2\Aula05 - Mecanicas Elaboradas de Movimentacao\Personagem02x05.cs" />
      <Compile Include="Assets\Bimestre2\Aula06 - Apresentacao de Texto\Personagem02x06.cs" />
+     <Compile Include="Assets\Bimestre2\Temp\Personagem02x07.cs" />
      <Compile Include="Assets\Bimestre2\Temp\tempBimestre2.cs" />
+     <Compile Include="Assets\Bimestre3\Aula01 - Inputs\ClickAsset.cs" />
+     <Compile Include="Assets\Bimestre3\Aula01 - Inputs\Personagem03x01.cs" />
+     <Compile Include="Assets\Bimestre3\Aula02 - Carregar Objetos\Aula03x02.cs" />
+     <Compile Include="Assets\Bimestre3\Aula02 - Carregar Objetos\CameraFollow.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>

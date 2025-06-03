@@ -24,6 +24,10 @@ TagManager:
   - trampolim
   - perder1Vida
   - ganhar1Vida
+  - fechar
+  - reiniciar
+  - mover
+  - botao_start
   layers:
   - Default
   - TransparentFX

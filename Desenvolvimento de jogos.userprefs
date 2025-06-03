@@ -1,8 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Bimestre2\Aula05 - Mecanicas Elaboradas de Movimentacao\Personagem02x05.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Bimestre3\Aula02 - Carregar Objetos\Aula03x02.cs">
     <Files>
-      <File FileName="Assets\Bimestre2\Aula05 - Mecanicas Elaboradas de Movimentacao\Personagem02x05.cs" Line="7" Column="2" />
+      <File FileName="Assets\Bimestre3\Aula02 - Carregar Objetos\Aula03x02.cs" Line="274" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

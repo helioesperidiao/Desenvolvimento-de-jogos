@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Bimestre2/Aula06 - Apresentacao de Texto/02x06.unity
+- path: Assets/Bimestre3/Aula01 - Inputs/fase02  - Click em assets.unity
   isLoaded: 1
   isActive: 1
