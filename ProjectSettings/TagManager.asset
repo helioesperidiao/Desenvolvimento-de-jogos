@@ -28,6 +28,8 @@ TagManager:
   - reiniciar
   - mover
   - botao_start
+  - destrutivel1
+  - destrutivel2
   layers:
   - Default
   - TransparentFX

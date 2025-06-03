@@ -70,7 +70,7 @@
      <Compile Include="Assets\Bimestre3\Aula01 - Inputs\ClickAsset.cs" />
      <Compile Include="Assets\Bimestre3\Aula01 - Inputs\Personagem03x01.cs" />
      <Compile Include="Assets\Bimestre3\Aula02 - Carregar Objetos\Aula03x02.cs" />
-     <Compile Include="Assets\Bimestre3\Aula02 - Carregar Objetos\CameraFollow.cs" />
+     <Compile Include="Assets\Bimestre3\Aula03\Aula03x03.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>
