@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Bimestre3/Aula03/fase03x03.unity
+- path: Assets/Bimestre3/Aula05 - Inimigos/aula03x05.unity
   isLoaded: 1
   isActive: 1
